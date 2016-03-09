@@ -8,74 +8,96 @@
 
 //////////////////////////////////////////////////////
 
+
 module.exports = function(grunt) {
 
-	grunt.loadNpmTasks('grunt-shell');
+  require('load-grunt-tasks')(grunt);
 
-	grunt.initConfig({
-			pkg: grunt.file.readJSON('package.json'),
-			webdriver: {
-				test: {
-					configFile: './wdio.conf.js'
-				}
-			},
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    webdriver: {
+      test: {
+        configFile: './wdio.conf.js'
+      }
+    },
 
-	    'selenium_standalone': {
-	        serverConfig: {
-	            seleniumVersion: '2.48.2',
-	            seleniumDownloadURL: 'http://selenium-release.storage.googleapis.com',
-	            drivers: {
-	                chrome: {
-	                  version: '2.20',
-	                  arch: process.arch,
-	                  baseURL: 'http://chromedriver.storage.googleapis.com'
-		                },
-		            },
-		        },
-		    },
+    'selenium_standalone': {
+      serverConfig: {
+        seleniumVersion: '2.48.2',
+        seleniumDownloadURL: 'http://selenium-release.storage.googleapis.com',
+        drivers: {
+          chrome: {
+            version: '2.20',
+            arch: process.arch,
+            baseURL: 'http://chromedriver.storage.googleapis.com'
+          },
+        },
+      },
+    },
 
-	    copy: {
-				main: {
-	        files: [
-						{
-							expand: true,
-							src: ['screenshots/**'],
-							dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>', filter: 'isFile',
-			        },
-						],
-			    },
-				},
+    copy: {
+      main: {
+        files: [{
+          expand: true,
+          src: ['screenshots/**'],
+          dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
+          filter: 'isFile',
+        }, ],
+      },
+    },
 
-		shell: {
-			hello: {
-				command: 'gulp watch'
-				}
-			},
+    ftp_push: {
+      your_target: {
+        options: {
+          username: "dev_build",
+          password: "ccsB@$$",
+          host: "10.200.200.18",
+          dest: "/gravyVisualTesting",
+        },
+        files: [{
+          expand: true,
+          cwd: '.',
+          src: [
+            ".gitignore",
+          ]
+        }]
+      }
+    },
 
-			watch: {
-			  scripts: {
-			    files: ['screenshots/fails', 'screenshots/fails/*'],
-			    tasks: ['copy:main'],
-					options: ['all', 'changed', 'deleted'],
-					  },
-			   },
-			});
+    shell: {
+      gulp: {
+        command: 'gulp uploadFailedScreenshots'
+      }
+    },
+
+
+    watch: {
+      scripts: {
+        files: ['screenshots/fails', 'screenshots/fails/*'],
+        tasks: ['copy:main'],
+        options: ['all', 'changed', 'deleted'],
+      },
+    },
+  });
 
 
   grunt.loadNpmTasks('grunt-force-task');
-	grunt.loadNpmTasks('grunt-webdriver');
-	grunt.loadNpmTasks('grunt-selenium-standalone');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-webdriver');
+  grunt.loadNpmTasks('grunt-selenium-standalone');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-load-tasks');
 
-	grunt.registerTask('w', ['watch']); // run command "grunt watch"
+  grunt.registerTask('w', ['watch']); // run command "grunt watch"
 
-	grunt.registerTask('default', // run command "grunt"
-			[
-				'selenium_standalone:serverConfig:install',
-				'force:selenium_standalone:serverConfig:start',
-				'force:webdriver',
-				'selenium_standalone:serverConfig:stop',
-		]);
+  grunt.registerTask('default', // run command "grunt"
+    [
+      'selenium_standalone:serverConfig:install',
+      'force:selenium_standalone:serverConfig:start',
+      'force:webdriver',
+      'selenium_standalone:serverConfig:stop',
+      'copy:main',
+      'shell',
+    ]);
 
 };
