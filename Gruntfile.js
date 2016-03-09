@@ -46,30 +46,11 @@ module.exports = function(grunt) {
       },
     },
 
-    ftp_push: {
-      your_target: {
-        options: {
-          username: "dev_build",
-          password: "ccsB@$$",
-          host: "10.200.200.18",
-          dest: "/gravyVisualTesting",
-        },
-        files: [{
-          expand: true,
-          cwd: '.',
-          src: [
-            ".gitignore",
-          ]
-        }]
-      }
-    },
-
     shell: {
       gulp: {
         command: 'gulp uploadFailedScreenshots'
       }
     },
-
 
     watch: {
       scripts: {

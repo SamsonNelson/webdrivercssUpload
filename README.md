@@ -11,23 +11,17 @@ The tests should run and create screenshots in the images folder now.
 
 ===================================================================================================
 
-### In three terminal windows run commands
- 1. gulp watch  
- 2. grunt watch  
- 3. grunt  
+### For basic Jenkins functionality
+ 1. run command 'grunt' to run tasks:  
+  * WebdriverCSS  
+  * Copy folder screenshots to gravyVisualTesting with a timestamp  
+  * Deploys new files to FTP Server  
+  * Prints URL  
 
-#### The Gulpfile.js is responsible for
 
-"gulp watch"  
- 1. watches the gravyVisualTesting/* for anything changes to the files located there  
- 2. when files have changed - runs the deploy and print tasks  
+#### The Gruntfile.js contains
+ 1. Selenium WebdriverCSS
+ 2. Copy files from screenshots to gravyVisualTesting
+ 3. Watch on screenshots
 
 #### The Gruntfile.js is responsible for
-
-"grunt watch"
- 1. watches for changes in the /screenshots/fails/* folder  
- 2. copies both the fails & reference folders - timestamps them - and copies them to the gravyVisualTesting folder  
-
-"grunt"
- 1. Runs WebDriverCSS  
- 2. Takes screenshots and saves them to /screenshots/ reference & fails  
