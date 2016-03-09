@@ -8,11 +8,10 @@
 4. Run `grunt test` from project root.
 
 The tests should run and create screenshots in the images folder now.
-# grunt-webdrivercss-example
 
 ===================================================================================================
 
-### * In three terminal windows run commands
+### In three terminal windows run commands
  1. gulp watch  
  2. grunt watch  
  3. grunt  
