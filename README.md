@@ -13,9 +13,9 @@ The tests should run and create screenshots in the images folder now.
 ===================================================================================================
 
 1. In three terminal windows run commands
- ..* gulp watch
- ..* grunt watch
- ..* grunt
+ * gulp watch  
+ * grunt watch  
+ * grunt  
 
 The Gulpfile.js is responsible for
 
