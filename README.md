@@ -12,23 +12,23 @@ The tests should run and create screenshots in the images folder now.
 
 ===================================================================================================
 
-1. In three terminal windows run commands
- * gulp watch  
- * grunt watch  
- * grunt  
+### * In three terminal windows run commands
+ 1. gulp watch  
+ 2. grunt watch  
+ 3. grunt  
 
-The Gulpfile.js is responsible for
+#### The Gulpfile.js is responsible for
 
-"gulp watch"
-watches the gravyVisualTesting/* for anything changes to the files located there
-when files have changed - runs the deploy and print tasks
+"gulp watch"  
+ 1. watches the gravyVisualTesting/* for anything changes to the files located there  
+ 2. when files have changed - runs the deploy and print tasks  
 
-The Gruntfile.js is responsible for
+#### The Gruntfile.js is responsible for
 
 "grunt watch"
-watches for changes in the /screenshots/fails/* folder
-copies both the fails & reference folders - timestamps them - and copies them to the gravyVisualTesting folder
+ 1. watches for changes in the /screenshots/fails/* folder  
+ 2. copies both the fails & reference folders - timestamps them - and copies them to the gravyVisualTesting folder  
 
 "grunt"
-Runs WebDriverCSS
-Takes screenshots and saves them to /screenshots/ reference & fails
+ 1. Runs WebDriverCSS  
+ 2. Takes screenshots and saves them to /screenshots/ reference & fails  
