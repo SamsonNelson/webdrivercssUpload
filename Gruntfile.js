@@ -8,6 +8,8 @@
 
 //////////////////////////////////////////////////////
 
+var fs = require('fs');
+var readDir = require('readdir');
 
 module.exports = function(grunt) {
 
@@ -35,16 +37,46 @@ module.exports = function(grunt) {
       },
     },
 
-    copy: {
-      main: {
-        files: [{
-          expand: true,
-          src: ['screenshots/**'],
-          dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
-          filter: 'isFile',
-        }, ],
-      },
-    },
+	// 		if: {
+	// 		target: {
+	// 				// Target-specific file lists and/or options go here.
+	// 				files: 'screenshots/fails/*.png',
+	// 				options: {
+	// 						// execute test function(s)
+	// 						test: function(filepath){
+	// 								if(failsImages.exists) {
+	// 									return true;
+	// 								} else {
+	// 									return false;
+	// 								}
+	// 						 },
+	// 				},
+	// 				//array of tasks to execute if all tests pass
+	// 				ifTrue: [ 'copy:main' ],
+	//
+	// 				//array of tasks to execute if any test fails
+	// 				ifFalse: ['taskIfFalse']
+	// 		},
+	// },
+
+		copy: {
+			main1: {
+				files: [{
+					expand: true,
+					src: ['screenshots/**'],
+					dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
+				}],
+			},
+			// main2: {
+			// 	files: [{
+			// 		expand: true,
+			// 		flatten: true,
+			// 		src: ['screenshots/reference/*.regression.png', 'screenshots/reference/*.baseline.png'],
+			// 		dest: '',
+			// 		// dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
+			// 	}],
+			// },
+		},
 
     shell: {
       gulp: {
@@ -61,15 +93,27 @@ module.exports = function(grunt) {
     },
   });
 
-
+  grunt.loadNpmTasks('grunt-if');
   grunt.loadNpmTasks('grunt-force-task');
   grunt.loadNpmTasks('grunt-webdriver');
   grunt.loadNpmTasks('grunt-selenium-standalone');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-load-tasks');
+	grunt.loadNpmTasks('grunt-file-exists');
+
 
   grunt.registerTask('w', ['watch']); // run command "grunt watch"
+
+	grunt.registerTask('i', ['if']);
+
+	grunt.registerTask('baseline', // run command "grunt baseline"
+		[
+			'selenium_standalone:serverConfig:install',
+			'force:selenium_standalone:serverConfig:start',
+			'force:webdriver',
+			'selenium_standalone:serverConfig:stop',
+		]);
 
   grunt.registerTask('default', // run command "grunt"
     [
@@ -77,8 +121,8 @@ module.exports = function(grunt) {
       'force:selenium_standalone:serverConfig:start',
       'force:webdriver',
       'selenium_standalone:serverConfig:stop',
-      'copy:main',
-      'shell',
+			'copy:main1',
+			'shell',
     ]);
 
 };

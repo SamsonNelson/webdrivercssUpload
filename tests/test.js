@@ -7,6 +7,7 @@ describe('Homepage',function() {
   it('example page should look the same',function(done) {
         browser
             .url('http://onlineclock.net/seconds/')
+            // .url('http://example.com/')
             .title().then(function (title) {
                 console.log('Title was: ' + title.value);
             })

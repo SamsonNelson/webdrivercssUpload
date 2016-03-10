@@ -14,6 +14,9 @@ var print = require('gulp-print');
 var notify = require("gulp-notify");
 var newer = require('gulp-newer');
 var clean = require('gulp-clean');
+var filter = require('gulp-filter');
+var gulpmatch = require('gulp-match');
+var map = require('map-stream');
 
 /////////////////////////////////////////////////////////////////////////////
 // initialized in Gruntfile.js with shell command "uploadFailedScreenshots"
@@ -35,14 +38,12 @@ gulp.task('deploy', function() {
     'gravyVisualTesting/**/**/**/*'
   ];
 
-  return gulp.src(globs, {
-      base: 'gravyVisualTesting',
-      buffer: false
-    })
-    .pipe(conn.newer('gravyVisualTesting')) // only uploads newer files
-    .pipe(conn.dest('gravyVisualTesting'))
-});
+  return gulp.src(globs, {base: 'gravyVisualTesting', buffer: false })
 
+      .pipe(conn.newer('gravyVisualTesting')) // only uploads newer files
+      .pipe(conn.dest('gravyVisualTesting'))
+  });
+  
 //////////////////////////////////////////////////////////////////////////////
 // Gulp Task that once files are deployed - Prints out URL
 gulp.task('print', ['deploy'], function() {
