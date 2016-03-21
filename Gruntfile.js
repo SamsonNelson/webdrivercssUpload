@@ -1,15 +1,7 @@
-// Command 'grunt' runs WebDriverCSS and captures screenshots
-// Command 'grunt watch' watches screenshots/fails for changes - then sends a
-// timestamped copy to gravyVisualTesting
-//
-// On Regression test failure:
-//		1. copies images to gravyVisualTesting
-//		2. Gulp watch then kicks off 'deploy' and 'print' tasks
+// Run command 'grunt baseline' for inital images
+// Run command 'grunt' for regression tests
 
 //////////////////////////////////////////////////////
-
-var fs = require('fs');
-var readDir = require('readdir');
 
 module.exports = function(grunt) {
 
@@ -23,7 +15,7 @@ module.exports = function(grunt) {
       }
     },
 
-    'selenium_standalone': {
+    selenium_standalone: {
       serverConfig: {
         seleniumVersion: '2.48.2',
         seleniumDownloadURL: 'http://selenium-release.storage.googleapis.com',
@@ -37,84 +29,39 @@ module.exports = function(grunt) {
       },
     },
 
-		// 	if: {
-		// 	target: {
-		// 			options: {
-		// 					// execute test function(s)
-		// 					test: fs.stat.isFile('screenshots/fails/*.png', function(err, stat) {
-		// 						    if(err == null) {
-		// 						        return true
-		// 						    } else {
-		// 						        return false
-		// 						    }
-		// 						})
-		// 			},
-		// 			//array of tasks to execute if all tests pass
-		// 			ifTrue: [ 'copy:main1' ],
-    //
-		// 			//array of tasks to execute if any test fails
-		// 			ifFalse: ['do nothing']
-		// 		},
-		// },
-
-		copy: {
-			main1: {
-				files: [{
-					expand: true,
-					src: ['screenshots/**'],
-					dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
-				}],
-			},
-			// main2: {
-			// 	files: [{
-			// 		expand: true,
-			// 		flatten: true,
-			// 		src: ['screenshots/reference/*.regression.png', 'screenshots/reference/*.baseline.png'],
-			// 		dest: '',
-			// 		// dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
-			// 	}],
-			// },
-		},
+    copy: {
+      main: {
+        files: [{
+          expand: true,
+          src: ['screenshots/**'],
+          dest: 'gravyVisualTesting/<%= grunt.template.today("mm-dd-yyyy-h:MMTT") %>',
+        }],
+      },
+    },
 
     shell: {
       gulp: {
-        command: 'gulp fileExist'
+        command: 'gulp fileExists'
       }
     },
 
     clean: ['screenshots/fails'],
 
-    watch: {
-      scripts: {
-        files: ['screenshots/fails', 'screenshots/fails/*'],
-        tasks: ['copy:main'],
-        options: ['all', 'changed', 'deleted'],
-      },
-    },
   });
 
-  grunt.loadNpmTasks('grunt-if');
   grunt.loadNpmTasks('grunt-force-task');
   grunt.loadNpmTasks('grunt-webdriver');
   grunt.loadNpmTasks('grunt-selenium-standalone');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-load-tasks');
-	grunt.loadNpmTasks('grunt-file-exists');
   grunt.loadNpmTasks('grunt-contrib-clean');
 
-
-  grunt.registerTask('w', ['watch']); // run command "grunt watch"
-
-	grunt.registerTask('i', ['if']);
-
-	grunt.registerTask('baseline', // run command "grunt baseline"
-		[
-			'selenium_standalone:serverConfig:install',
-			'force:selenium_standalone:serverConfig:start',
-			'force:webdriver',
-			'selenium_standalone:serverConfig:stop',
-		]);
+  grunt.registerTask('baseline', // run command "grunt baseline"
+    [
+      'selenium_standalone:serverConfig:install',
+      'force:selenium_standalone:serverConfig:start',
+      'force:webdriver',
+      'selenium_standalone:serverConfig:stop',
+    ]);
 
   grunt.registerTask('default', // run command "grunt"
     [
@@ -122,8 +69,8 @@ module.exports = function(grunt) {
       'force:selenium_standalone:serverConfig:start',
       'force:webdriver',
       'selenium_standalone:serverConfig:stop',
-			'copy:main1',
-			'shell',
+      'copy:main',
+      'shell',
     ]);
 
 };

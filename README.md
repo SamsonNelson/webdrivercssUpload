@@ -12,16 +12,5 @@ The tests should run and create screenshots in the images folder now.
 ===================================================================================================
 
 ### For basic Jenkins functionality
- 1. run command 'grunt' to run tasks:  
-  * WebdriverCSS  
-  * Copy folder screenshots to gravyVisualTesting with a timestamp  
-  * Deploys new files to FTP Server  
-  * Prints URL  
-
-
-#### The Gruntfile.js contains
- 1. Selenium WebdriverCSS
- 2. Copy files from screenshots to gravyVisualTesting
- 3. Watch on screenshots
-
-#### The Gruntfile.js is responsible for
+ 1. Command 'grunt baseline' will take initial images
+ 2. Command 'grunt' will run regression tests an on failure will upload to FTP server
