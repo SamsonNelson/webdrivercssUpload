@@ -37,27 +37,25 @@ module.exports = function(grunt) {
       },
     },
 
-	// 		if: {
-	// 		target: {
-	// 				// Target-specific file lists and/or options go here.
-	// 				files: 'screenshots/fails/*.png',
-	// 				options: {
-	// 						// execute test function(s)
-	// 						test: function(filepath){
-	// 								if(failsImages.exists) {
-	// 									return true;
-	// 								} else {
-	// 									return false;
-	// 								}
-	// 						 },
-	// 				},
-	// 				//array of tasks to execute if all tests pass
-	// 				ifTrue: [ 'copy:main' ],
-	//
-	// 				//array of tasks to execute if any test fails
-	// 				ifFalse: ['taskIfFalse']
-	// 		},
-	// },
+		// 	if: {
+		// 	target: {
+		// 			options: {
+		// 					// execute test function(s)
+		// 					test: fs.stat.isFile('screenshots/fails/*.png', function(err, stat) {
+		// 						    if(err == null) {
+		// 						        return true
+		// 						    } else {
+		// 						        return false
+		// 						    }
+		// 						})
+		// 			},
+		// 			//array of tasks to execute if all tests pass
+		// 			ifTrue: [ 'copy:main1' ],
+    //
+		// 			//array of tasks to execute if any test fails
+		// 			ifFalse: ['do nothing']
+		// 		},
+		// },
 
 		copy: {
 			main1: {
@@ -80,9 +78,11 @@ module.exports = function(grunt) {
 
     shell: {
       gulp: {
-        command: 'gulp uploadFailedScreenshots'
+        command: 'gulp fileExist'
       }
     },
+
+    clean: ['screenshots/fails'],
 
     watch: {
       scripts: {
@@ -101,6 +101,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-load-tasks');
 	grunt.loadNpmTasks('grunt-file-exists');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
 
   grunt.registerTask('w', ['watch']); // run command "grunt watch"

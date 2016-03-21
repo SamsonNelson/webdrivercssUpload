@@ -8,6 +8,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var ftp = require('vinyl-ftp');
+var fs = require('fs');
 var watch = require('gulp-watch');
 var batch = require('gulp-batch');
 var print = require('gulp-print');
@@ -18,9 +19,13 @@ var filter = require('gulp-filter');
 var gulpmatch = require('gulp-match');
 var map = require('map-stream');
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 // initialized in Gruntfile.js with shell command "uploadFailedScreenshots"
-gulp.task('uploadFailedScreenshots', ['deploy', 'print'])
+gulp.task('uploadFailedScreenshots', ['deploy', 'print'], function(){
+    gulp.start('cleanDir')
+});
 
 //////////////////////////////////////////////////////////////////////////////
 // Gulp Task for deploying timestamped images from gravyVisualTesting/ to Server
@@ -43,7 +48,7 @@ gulp.task('deploy', function() {
       .pipe(conn.newer('gravyVisualTesting')) // only uploads newer files
       .pipe(conn.dest('gravyVisualTesting'))
   });
-  
+
 //////////////////////////////////////////////////////////////////////////////
 // Gulp Task that once files are deployed - Prints out URL
 gulp.task('print', ['deploy'], function() {
@@ -71,8 +76,26 @@ gulp.task('watch', function() {
 // 'gulp cleanDir'
 
 gulp.task('cleanDir', function() {
-  return gulp.src('gravyVisualTesting/*', {
+  var globs = [
+    'gravyVisualTesting/*',
+    'screenshots/fails/*'
+  ]
+  return gulp.src(globs, {
       read: false
     })
     .pipe(clean());
+});
+
+//////////////////////////////////////////////////////////////////////////////
+
+gulp.task('fileExist', function() {
+    fs.stat('screenshots/fails/examplepage.body.1024px.diff.png', function(err, stats) {
+      if(err == null) {
+          return console.log('Visual Testing FAILED'),
+          gulp.start('uploadFailedScreenshots')
+        }
+          gulp.start('cleanDir'),
+        // console.log(),
+        console.log("\nVisual Testing PASSED\n")
+    });
 });
